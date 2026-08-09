@@ -1,0 +1,3 @@
+Put all photos and images in this folder (compress them first — aim under 400 KB each).
+Then, in index.html, replace the dashed placeholder blocks with your image.
+See README.md for the exact copy-paste instructions.
