@@ -348,7 +348,10 @@
         <p style="margin:0" data-reveal="1">Fishing is also something I enjoy doing with my family and friends. Some of my favorite memories are early mornings on the water—talking, laughing, and waiting for the next bite. It's a great way to take a break from school and sports, spend time outside, and enjoy being in nature.</p>
       </div>
       <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:clamp(50px,7vw,100px)">
-        <div style="overflow:hidden;border-radius:2px;aspect-ratio:16/10"><img src="images/fishing-pompano-catch.jpg" alt="Alex holding two pompano he caught while fishing" style="width:100%;height:100%;object-fit:cover;display:block"></div>
+        <div style="position:relative;overflow:hidden;border-radius:2px;aspect-ratio:16/10">
+          <img src="images/fishing-pompano-catch.jpg" alt="" aria-hidden="true" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;filter:blur(22px) brightness(0.85);transform:scale(1.15);display:block">
+          <img src="images/fishing-pompano-catch.jpg" alt="Alex holding two pompano he caught while fishing" style="position:relative;width:100%;height:100%;object-fit:contain;display:block">
+        </div>
         <div style="overflow:hidden;border-radius:2px;aspect-ratio:16/10"><img src="images/fishing-snook-catch.jpg" alt="Alex and friends holding fish they caught on a Keys fishing charter, at the dock" style="width:100%;height:100%;object-fit:cover;display:block"></div>
         <div style="overflow:hidden;border-radius:2px;aspect-ratio:16/10;background:#000">
           <video controls preload="metadata" style="width:100%;height:100%;object-fit:contain;display:block">
