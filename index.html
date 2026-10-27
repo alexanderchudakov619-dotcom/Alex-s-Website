@@ -431,12 +431,22 @@
   });
   if (!reduce && 'IntersectionObserver' in window) {
     var vh = window.innerHeight;
+    // Hidden text sits slightly below its spot if it's below the screen, slightly above if it's above,
+    // so it always eases in from the direction you're scrolling
+    function hide(el, above) {
+      el.style.transitionDelay = '0ms';
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(' + (above ? -14 : 14) + 'px)';
+    }
     els.forEach(function (el) {
-      if (el.getBoundingClientRect().top > vh * 0.9) {
-        el.style.opacity = '0';
-        el.style.transform = 'translateY(14px)';
+      if (el.getBoundingClientRect().top > vh * 0.9) hide(el, false);
+      el.style.willChange = 'opacity, transform';
+    });
+    // Set transitions after the initial hide so nothing animates on page load
+    requestAnimationFrame(function () {
+      els.forEach(function (el) {
         el.style.transition = 'opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1)';
-      }
+      });
     });
     var revealObs = new IntersectionObserver(function (entries) {
       var i = 0;
@@ -445,10 +455,11 @@
           e.target.style.transitionDelay = Math.min(i++ * 70, 350) + 'ms';
           e.target.style.opacity = '1';
           e.target.style.transform = 'none';
-          revealObs.unobserve(e.target);
+        } else {
+          hide(e.target, e.boundingClientRect.top < (e.rootBounds ? e.rootBounds.top : 0));
         }
       });
-    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0 });
     els.forEach(function (el) { revealObs.observe(el); });
   }
 
