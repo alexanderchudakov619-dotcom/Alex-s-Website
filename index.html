@@ -417,25 +417,38 @@
 <script>
 (function () {
   var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-  var els = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+  var blocks = Array.prototype.slice.call(document.querySelectorAll('[data-reveal]'));
+  // Reveal the text inside each block piece by piece, so long sections ease in as you read
+  var els = [];
+  blocks.forEach(function (block) {
+    var parts = [];
+    Array.prototype.forEach.call(block.querySelectorAll('h1,h2,h3,h4,p,li,div'), function (el) {
+      var isText = el.tagName !== 'DIV' || (el.children.length === 0 && el.textContent.trim());
+      if (isText && !parts.some(function (p) { return p.contains(el); })) parts.push(el);
+    });
+    if (parts.length) parts.forEach(function (p) { els.push(p); });
+    else els.push(block);
+  });
   if (!reduce && 'IntersectionObserver' in window) {
     var vh = window.innerHeight;
     els.forEach(function (el) {
       if (el.getBoundingClientRect().top > vh * 0.9) {
         el.style.opacity = '0';
-        el.style.transform = 'translateY(18px)';
-        el.style.transition = 'opacity .8s cubic-bezier(.22,.61,.36,1), transform .8s cubic-bezier(.22,.61,.36,1)';
+        el.style.transform = 'translateY(14px)';
+        el.style.transition = 'opacity .7s cubic-bezier(.22,.61,.36,1), transform .7s cubic-bezier(.22,.61,.36,1)';
       }
     });
     var revealObs = new IntersectionObserver(function (entries) {
+      var i = 0;
       entries.forEach(function (e) {
         if (e.isIntersecting) {
+          e.target.style.transitionDelay = Math.min(i++ * 70, 350) + 'ms';
           e.target.style.opacity = '1';
           e.target.style.transform = 'none';
           revealObs.unobserve(e.target);
         }
       });
-    }, { rootMargin: '0px 0px -12% 0px', threshold: 0.05 });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.05 });
     els.forEach(function (el) { revealObs.observe(el); });
   }
 
